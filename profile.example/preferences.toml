@@ -1,0 +1,86 @@
+# Targeting, caps and pacing for scripts/jobtool.py.
+# /naukri-setup copies this to profile/preferences.toml and fills it in.
+# Change values only when the user asks; jobtool reads this file on every run.
+
+[experience]
+career_start = ""     # "YYYY-MM" of the first full-time job
+gap_months = 0        # months without a job since then
+min_slack = 1.0       # a job's minimum may exceed total experience by this much
+max_slack = 1.0       # a job's maximum may fall short of it by this much
+
+[salary]
+floor_lpa = 0         # skip only when a disclosed range tops out below this
+
+[location]
+# A job passes when its location names any of these. Temporary WFH counts as office.
+office = []           # e.g. ["bengaluru", "bangalore"]; empty means remote jobs only
+search_city = ""      # the city in Naukri's search URL: .../react-developer-jobs-in-<this>
+                      # e.g. "bengaluru", "pune", "delhi-ncr"; empty means remote searches only
+remote = ["remote", "work from home", "wfh", "anywhere"]
+
+[titles]
+# A title containing any of these as a whole word is skipped before scoring.
+# /naukri-setup rewrites this list to fit your stack; the list below suits a frontend engineer.
+exclude = [
+  "backend", "back end", "back-end", "full stack", "fullstack", "full-stack", "mern", "mean stack",
+  "java", "python", "golang", "ruby", "php", "wordpress", ".net", "asp.net", "c++",
+  "devops", "sre", "data engineer", "data scientist", "data analyst", "ml engineer", "mlops",
+  "qa", "sdet", "tester", "test engineer",
+  "android", "ios", "flutter",
+  "salesforce", "sap", "servicenow",
+  "designer", "intern", "internship", "trainee", "fresher",
+  "sales", "marketing", "hr", "l&d", "support engineer",
+]
+
+[caps]
+per_day = 25              # Naukri allows 50/day, manual applies included
+per_run = 13
+evening_max = 15          # the evening run may use the day's leftover up to this
+company_site_per_run = 5  # Phase 2; not counted in per_day
+
+[pace]
+min_gap_seconds = 60      # between application attempts
+jitter_seconds = 60       # plus a random 0..jitter
+
+[window]
+start = "08:00"           # IST
+end = "22:00"
+min_hours_between_runs = 3
+
+[safety]
+cooldown_hours = 24       # after any signal
+max_consecutive_failures = 2
+lock_stale_hours = 3
+
+[search]
+job_age_days = 3          # Naukri's jobAge filter: 1, 3, 7, 15 or 30
+max_pages = 8             # search page loads per run
+
+[targeting]
+# Read by `jobtool start` and used by the scoring and final-check steps.
+# /naukri-setup derives these from your profile and your answers.
+target_roles = "senior <your stack> engineer; <your stack> lead"
+other_roles = "a generic senior software engineer with <your stack> tags"
+core_stack = "the skill-table rows rated 7+ in profile/profile.md"
+avoid_stacks = "<stacks you will not work in>"
+dealbreakers = "<e.g. service bonds; night shifts; companies to avoid>"
+consultancies = "penalize"  # penalize | neutral | avoid
+
+[scoring]
+threshold = 65            # queue jobs scoring at or above this
+queue_max_age_days = 7    # queued jobs older than this are dropped
+
+# One group per run, in rotation. Each keyword is searched remote and in search_city.
+# /naukri-setup replaces these examples with groups built from your profile.
+[[keyword_sets]]
+group = "senior-frontend"
+keywords = ["senior frontend developer", "senior react developer", "senior frontend engineer",
+            "react js developer", "next js developer", "sde 2 frontend"]
+
+[[keyword_sets]]
+group = "frontend-lead"
+keywords = ["frontend lead", "frontend tech lead", "lead ui engineer", "ui lead", "react lead"]
+
+[[keyword_sets]]
+group = "ai-frontend"
+keywords = ["generative ai frontend", "ai frontend engineer", "llm frontend developer"]

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-label="naukri-autopilot: a small robot in a tie applies to jobs while you drink chai">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1433"/><stop offset="1" stop-color="#3a1d4f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="440" rx="24" fill="url(#bg)"/>
+  <g fill="#ffd166" opacity=".55"><circle cx="70" cy="60" r="3"/><circle cx="430" cy="42" r="2"/><circle cx="610" cy="392" r="3"/><circle cx="1215" cy="48" r="2"/><circle cx="1240" cy="396" r="3"/></g>
+
+  <!-- title -->
+  <text x="64" y="118" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="52" font-weight="700" fill="#fff">naukri-<tspan fill="#ffb43a">autopilot</tspan></text>
+  <text x="66" y="164" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="25" fill="#e9e2f5">It applies. You drink chai.</text>
+  <text x="66" y="198" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" fill="#b9aed0">Honest answers, a human pace, and a full stop at the first warning.</text>
+
+  <!-- robot -->
+  <g transform="translate(92 232)">
+    <line x1="62" y1="0" x2="62" y2="18" stroke="#ffb43a" stroke-width="5"/>
+    <circle cx="62" cy="-3" r="7" fill="#ff6b6b"/>
+    <rect x="16" y="18" width="92" height="66" rx="16" fill="#f4eefc"/>
+    <circle cx="44" cy="50" r="9" fill="#1b1433"/><circle cx="80" cy="50" r="9" fill="#1b1433"/>
+    <circle cx="47" cy="47" r="3" fill="#fff"/><circle cx="83" cy="47" r="3" fill="#fff"/>
+    <path d="M48 68 q14 10 28 0" stroke="#1b1433" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="26" y="90" width="72" height="66" rx="12" fill="#d9cdee"/>
+    <path d="M62 90 l-9 12 9 42 9 -42 z" fill="#ff6b6b"/>
+    <rect x="4" y="98" width="16" height="42" rx="8" fill="#d9cdee"/>
+    <rect x="104" y="98" width="16" height="42" rx="8" fill="#d9cdee"/>
+  </g>
+
+  <!-- chai -->
+  <g transform="translate(272 306)">
+    <path d="M18 -14 q-9 -11 0 -20 q9 -10 0 -20" stroke="#b9aed0" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M38 -14 q-9 -11 0 -20 q9 -10 0 -20" stroke="#b9aed0" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M0 0 h58 l-7 72 q-1 6 -7 6 h-30 q-6 0 -7 -6 z" fill="#ffffff" fill-opacity=".85"/>
+    <path d="M3 12 h52 l-5 58 q-1 3 -4 3 h-34 q-3 0 -4 -3 z" fill="#c9823a"/>
+  </g>
+  <text x="372" y="366" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#b9aed0">(the chai is yours)</text>
+
+  <!-- terminal -->
+  <g transform="translate(640 46)">
+    <rect width="580" height="348" rx="14" fill="#0f0b1f" stroke="#5b4a7a"/>
+    <circle cx="26" cy="26" r="7" fill="#ff6b6b"/><circle cx="50" cy="26" r="7" fill="#ffd166"/><circle cx="74" cy="26" r="7" fill="#5fd38d"/>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="19">
+      <text x="26" y="78" fill="#ffb43a">&gt; /naukri-run morning</text>
+      <text x="26" y="122" fill="#5fd38d">✓ <tspan fill="#e9e2f5">reads the whole job post</tspan></text>
+      <text x="26" y="156" fill="#5fd38d">✓ <tspan fill="#e9e2f5">scores it against your profile</tspan></text>
+      <text x="26" y="190" fill="#5fd38d">✓ <tspan fill="#e9e2f5">answers from facts you approved</tspan></text>
+      <text x="26" y="224" fill="#ff6b6b">✗ <tspan fill="#e9e2f5">"12 years of Rust?"</tspan></text>
+      <text x="48" y="254" fill="#b9aed0">no honest answer, so it skips</text>
+      <text x="26" y="288" fill="#ffd166">… <tspan fill="#e9e2f5">waits a human-sized minute</tspan></text>
+      <text x="26" y="322" fill="#5fd38d">✓ <tspan fill="#e9e2f5">writes you a report</tspan></text>
+    </g>
+  </g>
+</svg>

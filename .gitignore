@@ -1,0 +1,20 @@
+# Private: personal profile, answers, application data
+profile/
+data/
+*.pdf
+
+# Private working notes: design history, plans, research
+docs/*
+!docs/assets/
+
+# Anything named *.local stays on this machine (CLAUDE.local.md, settings.local.json)
+*.local
+*.local.*
+.local/
+
+# Python / OS noise
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+.coverage

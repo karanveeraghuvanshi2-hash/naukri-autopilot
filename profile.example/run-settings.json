@@ -1,0 +1,8 @@
+{
+  "disableClaudeAiConnectors": true,
+  "syncClaudeAiSkills": false,
+  "disableBundledSkills": true,
+  "env": {
+    "NAUKRI_LEAN": "1"
+  }
+}

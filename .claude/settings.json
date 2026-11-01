@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(python3 scripts/jobtool.py status)",
+      "Bash(python3 scripts/jobtool.py start morning)",
+      "Bash(python3 scripts/jobtool.py start morning --dry-run)",
+      "Bash(python3 scripts/jobtool.py start evening)",
+      "Bash(python3 scripts/jobtool.py start evening --dry-run)",
+      "Bash(python3 scripts/jobtool.py start manual)",
+      "Bash(python3 scripts/jobtool.py start manual --dry-run)",
+      "Bash(python3 scripts/jobtool.py finish *)",
+      "Bash(python3 scripts/jobtool.py prefilter *)",
+      "Bash(python3 scripts/jobtool.py rescreen --apply)",
+      "Bash(python3 scripts/jobtool.py score *)",
+      "Bash(python3 scripts/jobtool.py queue *)",
+      "Bash(python3 scripts/jobtool.py update *)",
+      "Bash(python3 scripts/jobtool.py pace *)",
+      "Bash(python3 scripts/jobtool.py signal *)",
+      "Bash(python3 scripts/jobtool.py mark *)",
+      "Bash(python3 scripts/jobtool.py report *)",
+      "Bash(python3 scripts/jobtool.py stats *)",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__tabs_create_mcp",
+      "mcp__claude-in-chrome__tabs_close_mcp",
+      "mcp__claude-in-chrome__navigate",
+      "mcp__claude-in-chrome__computer",
+      "mcp__claude-in-chrome__javascript_tool",
+      "mcp__claude-in-chrome__browser_batch",
+      "mcp__claude-in-chrome__find",
+      "mcp__claude-in-chrome__read_page",
+      "mcp__claude-in-chrome__get_page_text",
+      "mcp__claude-in-chrome__form_input",
+      "Edit(/data/**)",
+      "Edit(/profile/answers.md)",
+      "Edit(/knowledge/**)"
+    ],
+    "ask": [
+      "Bash(python3 scripts/jobtool.py update * --override *)",
+      "Edit(/knowledge/safety.md)",
+      "Edit(/data/state.json)",
+      "Edit(/data/run.lock)",
+      "Edit(/data/tracker.db)"
+    ]
+  }
+}

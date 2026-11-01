@@ -1,0 +1,126 @@
+#!/bin/bash
+# The one command people use. `./naukri` opens a lean Chrome session of Claude
+# Code in this folder; the rest manages the schedules. `./naukri help` lists them.
+set -u
+
+project="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$project" || exit 1
+settings="$project/profile/run-settings.json"
+agents="$HOME/Library/LaunchAgents"
+slots=(morning evening)
+
+die() { echo "naukri: $1" >&2; exit 1; }
+
+check_python() {
+  command -v python3 >/dev/null || die "python3 not found. Install Python 3.11+: brew install python"
+  python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))' \
+    || die "Python 3.11+ is needed, found $(python3 --version 2>&1). Try: brew install python"
+}
+
+check_claude() {
+  command -v claude >/dev/null || die "Claude Code not found. Install it: https://claude.com/claude-code"
+  if [ -n "${ANTHROPIC_API_KEY:-}${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+    die "ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN is set, and either one turns Chrome off. Unset it and use /login."
+  fi
+}
+
+# First run: the lean settings, with every plugin you have enabled switched off for
+# these sessions, so nothing else reads the private answers you type.
+ensure_settings() {
+  mkdir -p "$project/profile"
+  [ -f "$settings" ] && return
+  claude plugin list --json 2>/dev/null | python3 -c '
+import json, sys
+lean = json.load(open("profile.example/run-settings.json"))
+try:
+    enabled = [p["id"] for p in json.load(sys.stdin) if p.get("enabled")]
+except (ValueError, KeyError, TypeError):
+    enabled = []
+if enabled:
+    lean["enabledPlugins"] = {plugin: False for plugin in enabled}
+json.dump(lean, open(sys.argv[1], "w"), indent=2)
+' "$settings" || die "could not write $settings"
+  echo "Created $settings"
+}
+
+start_session() {
+  check_python
+  check_claude
+  ensure_settings
+  [ -f profile/resume.pdf ] || die "put your resume at $project/profile/resume.pdf first"
+  if command -v caffeinate >/dev/null; then
+    exec caffeinate -i claude --chrome --settings "$settings" "$@"
+  fi
+  exec claude --chrome --settings "$settings" "$@"
+}
+
+parse_time() {
+  [[ "$1" =~ ^([01][0-9]|2[0-3]):[0-5][0-9]$ ]] || die "times look like 09:30, got: $1"
+}
+
+schedule() {
+  local morning="${1:-09:30}" evening="${2:-18:30}" slot when file
+  parse_time "$morning"
+  parse_time "$evening"
+  [ "$(uname)" = Darwin ] || die "schedules use launchd, so they are macOS only"
+  check_python
+  check_claude
+  ensure_settings
+  [ -f profile/preferences.toml ] && [ -f profile/answers.md ] \
+    || die "run /naukri-setup first, then watch one /naukri-run manual"
+  mkdir -p "$agents" "$project/data/logs"
+  for slot in "${slots[@]}"; do
+    when="$morning"
+    [ "$slot" = evening ] && when="$evening"
+    file="$agents/local.naukri.$slot.plist"
+    python3 - "$slot" "$when" "$project" "$HOME" "$file" \
+      "$(dirname "$(command -v claude)"):$(dirname "$(command -v python3)")" <<'PY' || die "could not write the $slot schedule"
+import html, pathlib, sys
+slot, when, project, home, out, tools = sys.argv[1:]
+hour, minute = when.split(":")
+text = pathlib.Path("scripts/launchd/local.naukri.run.plist.example").read_text()
+for name, value in {"SLOT": slot, "PROJECT": project, "HOME": home, "TOOLPATH": tools,
+                    "HOUR": str(int(hour)), "MINUTE": str(int(minute))}.items():
+    text = text.replace(f"__{name}__", html.escape(value))
+pathlib.Path(out).write_text(text)
+PY
+    plutil -lint -s "$file" || die "$file is not a valid plist"
+    launchctl bootout "gui/$(id -u)/local.naukri.$slot" 2>/dev/null
+    launchctl bootstrap "gui/$(id -u)" "$file" || die "launchd refused $file"
+    echo "Scheduled $slot at $when (your Mac's local time)"
+  done
+  echo "Runs happen only between 08:00 and 22:00 IST. Keep the Mac on and logged in."
+}
+
+unschedule() {
+  local slot
+  for slot in "${slots[@]}"; do
+    launchctl bootout "gui/$(id -u)/local.naukri.$slot" 2>/dev/null
+    rm -f "$agents/local.naukri.$slot.plist"
+  done
+  echo "Schedules removed."
+}
+
+hold() {
+  check_python
+  [ -f data/tracker.db ] || python3 scripts/jobtool.py init >/dev/null
+  python3 scripts/jobtool.py hold "$1"
+}
+
+usage() {
+  cat <<'EOF'
+./naukri                        open Claude Code here, then type /naukri-setup or /naukri-run
+./naukri schedule [AM] [PM]     run automatically (default 09:30 and 18:30)
+./naukri unschedule             remove the schedules
+./naukri pause | resume         block all runs, or allow them again
+EOF
+}
+
+case "${1:-}" in
+  schedule) shift; schedule "$@" ;;
+  unschedule) unschedule ;;
+  pause) hold on ;;
+  resume) hold off ;;
+  help|-h|--help) usage ;;
+  *) start_session "$@" ;;
+esac
